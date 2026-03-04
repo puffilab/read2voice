@@ -29,13 +29,65 @@ python -m uvicorn server.main:app --host 0.0.0.0 --port 8000
 
 访问：`http://127.0.0.1:8000`
 
-### Docker 启动
+### Docker 部署（推荐）
+
+#### 1. 安装 Docker（Ubuntu/Debian）
 
 ```bash
-docker compose up --build -d
+sudo apt update
+sudo apt install -y docker.io docker-compose-plugin git
+sudo systemctl enable --now docker
 ```
 
-访问：`http://127.0.0.1:8000`
+#### 2. 拉取项目并准备数据目录
+
+```bash
+git clone https://github.com/puffilab/read2voice.git
+cd read2voice
+mkdir -p data
+```
+
+#### 3. 启动服务
+
+```bash
+docker compose up -d --build
+```
+
+#### 4. 检查运行状态
+
+```bash
+docker compose ps
+docker compose logs -f app
+docker compose logs -f nginx
+```
+
+访问地址：`http://你的服务器IP:8000`  
+默认 `docker-compose.yml` 使用 Nginx 对外暴露 `8000:80`。
+
+#### 5. 数据持久化说明
+
+- 宿主机 `./data` 挂载到容器 `/app/data`
+- 数据库默认在 `data/app.sqlite3`
+- 音频文件默认在 `data/audio/`
+
+#### 6. 常用运维命令
+
+```bash
+# 停止并移除容器（不会删除 ./data）
+docker compose down
+
+# 重启服务
+docker compose restart
+
+# 更新代码并重建
+git pull
+docker compose up -d --build
+```
+
+```bash
+# 备份数据目录
+tar czf backup-data-$(date +%F).tar.gz data
+```
 
 ### 主要环境变量
 
@@ -72,13 +124,65 @@ python -m uvicorn server.main:app --host 0.0.0.0 --port 8000
 
 瀏覽：`http://127.0.0.1:8000`
 
-### Docker 啟動
+### Docker 部署（建議）
+
+#### 1. 安裝 Docker（Ubuntu/Debian）
 
 ```bash
-docker compose up --build -d
+sudo apt update
+sudo apt install -y docker.io docker-compose-plugin git
+sudo systemctl enable --now docker
 ```
 
-瀏覽：`http://127.0.0.1:8000`
+#### 2. 下載專案並建立資料目錄
+
+```bash
+git clone https://github.com/puffilab/read2voice.git
+cd read2voice
+mkdir -p data
+```
+
+#### 3. 啟動服務
+
+```bash
+docker compose up -d --build
+```
+
+#### 4. 檢查執行狀態
+
+```bash
+docker compose ps
+docker compose logs -f app
+docker compose logs -f nginx
+```
+
+瀏覽：`http://你的伺服器IP:8000`  
+預設 `docker-compose.yml` 由 Nginx 對外提供 `8000:80`。
+
+#### 5. 資料持久化說明
+
+- 主機 `./data` 掛載到容器 `/app/data`
+- 資料庫預設在 `data/app.sqlite3`
+- 音訊檔案預設在 `data/audio/`
+
+#### 6. 常用維運指令
+
+```bash
+# 停止並移除容器（不會刪除 ./data）
+docker compose down
+
+# 重新啟動
+docker compose restart
+
+# 更新程式碼並重建
+git pull
+docker compose up -d --build
+```
+
+```bash
+# 備份資料目錄
+tar czf backup-data-$(date +%F).tar.gz data
+```
 
 ### 主要環境變數
 
@@ -116,13 +220,65 @@ python -m uvicorn server.main:app --host 0.0.0.0 --port 8000
 
 Open: `http://127.0.0.1:8000`
 
-### Quick Start (Docker)
+### Docker Deployment (Recommended)
+
+#### 1. Install Docker (Ubuntu/Debian)
 
 ```bash
-docker compose up --build -d
+sudo apt update
+sudo apt install -y docker.io docker-compose-plugin git
+sudo systemctl enable --now docker
 ```
 
-Open: `http://127.0.0.1:8000`
+#### 2. Clone the repo and prepare data directory
+
+```bash
+git clone https://github.com/puffilab/read2voice.git
+cd read2voice
+mkdir -p data
+```
+
+#### 3. Start containers
+
+```bash
+docker compose up -d --build
+```
+
+#### 4. Verify status and logs
+
+```bash
+docker compose ps
+docker compose logs -f app
+docker compose logs -f nginx
+```
+
+Open: `http://YOUR_SERVER_IP:8000`  
+By default, `docker-compose.yml` exposes Nginx on `8000:80`.
+
+#### 5. Data persistence
+
+- Host `./data` is mounted to container `/app/data`
+- SQLite database: `data/app.sqlite3`
+- Audio files: `data/audio/`
+
+#### 6. Common operations
+
+```bash
+# Stop and remove containers (keeps ./data)
+docker compose down
+
+# Restart services
+docker compose restart
+
+# Pull latest code and rebuild
+git pull
+docker compose up -d --build
+```
+
+```bash
+# Backup data directory
+tar czf backup-data-$(date +%F).tar.gz data
+```
 
 ### Main Environment Variables
 
@@ -160,13 +316,65 @@ python -m uvicorn server.main:app --host 0.0.0.0 --port 8000
 
 アクセス：`http://127.0.0.1:8000`
 
-### クイックスタート（Docker）
+### Docker デプロイ（推奨）
+
+#### 1. Docker をインストール（Ubuntu/Debian）
 
 ```bash
-docker compose up --build -d
+sudo apt update
+sudo apt install -y docker.io docker-compose-plugin git
+sudo systemctl enable --now docker
 ```
 
-アクセス：`http://127.0.0.1:8000`
+#### 2. リポジトリ取得とデータディレクトリ準備
+
+```bash
+git clone https://github.com/puffilab/read2voice.git
+cd read2voice
+mkdir -p data
+```
+
+#### 3. 起動
+
+```bash
+docker compose up -d --build
+```
+
+#### 4. 状態確認とログ確認
+
+```bash
+docker compose ps
+docker compose logs -f app
+docker compose logs -f nginx
+```
+
+アクセス：`http://サーバーIP:8000`  
+既定では `docker-compose.yml` で Nginx が `8000:80` を公開します。
+
+#### 5. データ永続化
+
+- ホストの `./data` をコンテナ `/app/data` にマウント
+- SQLite DB: `data/app.sqlite3`
+- 音声ファイル: `data/audio/`
+
+#### 6. よく使う運用コマンド
+
+```bash
+# 停止してコンテナ削除（./data は保持）
+docker compose down
+
+# 再起動
+docker compose restart
+
+# 最新コードを反映して再ビルド
+git pull
+docker compose up -d --build
+```
+
+```bash
+# データディレクトリをバックアップ
+tar czf backup-data-$(date +%F).tar.gz data
+```
 
 ### 主な環境変数
 
