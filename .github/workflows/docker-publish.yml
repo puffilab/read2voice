@@ -11,9 +11,6 @@ on:
 permissions:
   contents: read
 
-env:
-  IMAGE_NAME: puffilab/read2voice
-
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -37,7 +34,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.IMAGE_NAME }}
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/read2voice
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=semver,pattern={{version}}

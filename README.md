@@ -98,6 +98,8 @@ tar czf backup-data-$(date +%F).tar.gz data
 
 - `DOCKERHUB_USERNAME`：你的 Docker Hub 用户名
 - `DOCKERHUB_TOKEN`：Docker Hub Access Token（不要用密码）
+- 并确认 Docker Hub 已存在仓库：`<DOCKERHUB_USERNAME>/read2voice`（建议先在网页创建 Public repository）
+- `DOCKERHUB_TOKEN` 需要至少包含 `Read` + `Write` 权限
 
 ### 主要环境变量
 
@@ -203,6 +205,8 @@ tar czf backup-data-$(date +%F).tar.gz data
 
 - `DOCKERHUB_USERNAME`：你的 Docker Hub 使用者名稱
 - `DOCKERHUB_TOKEN`：Docker Hub Access Token（不要使用密碼）
+- 並確認 Docker Hub 已建立倉庫：`<DOCKERHUB_USERNAME>/read2voice`（建議先建立 Public repository）
+- `DOCKERHUB_TOKEN` 至少需要 `Read` + `Write` 權限
 
 ### 主要環境變數
 
@@ -309,6 +313,8 @@ Set these GitHub repository secrets first:
 
 - `DOCKERHUB_USERNAME`: your Docker Hub username
 - `DOCKERHUB_TOKEN`: a Docker Hub access token (use token, not password)
+- Ensure the Docker Hub repository exists first: `<DOCKERHUB_USERNAME>/read2voice` (create a public repository in Docker Hub)
+- The token should have at least `Read` + `Write` permissions
 
 ### Main Environment Variables
 
@@ -415,6 +421,8 @@ GitHub リポジトリの Secrets に以下を設定してください：
 
 - `DOCKERHUB_USERNAME`：Docker Hub ユーザー名
 - `DOCKERHUB_TOKEN`：Docker Hub の Access Token（パスワードではなくトークンを使用）
+- Docker Hub 側で `<DOCKERHUB_USERNAME>/read2voice` リポジトリを事前作成してください（Public 推奨）
+- `DOCKERHUB_TOKEN` には少なくとも `Read` + `Write` 権限が必要です
 
 ### 主な環境変数
 
