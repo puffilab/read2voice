@@ -89,6 +89,16 @@ docker compose up -d --build
 tar czf backup-data-$(date +%F).tar.gz data
 ```
 
+#### GitHub Actions 自动推送 Docker 镜像
+
+仓库已包含工作流文件：`.github/workflows/docker-publish.yml`。  
+当你推送到 `main` 或推送 `v*` 标签时，会自动构建并推送镜像到 Docker Hub。
+
+请在 GitHub 仓库里设置以下 Secrets：
+
+- `DOCKERHUB_USERNAME`：你的 Docker Hub 用户名
+- `DOCKERHUB_TOKEN`：Docker Hub Access Token（不要用密码）
+
 ### 主要环境变量
 
 - `APP_DATA_DIR`：数据目录（默认 `./data`）
@@ -183,6 +193,16 @@ docker compose up -d --build
 # 備份資料目錄
 tar czf backup-data-$(date +%F).tar.gz data
 ```
+
+#### GitHub Actions 自動推送 Docker 映像
+
+倉庫已包含工作流程檔：`.github/workflows/docker-publish.yml`。  
+當你推送到 `main` 或推送 `v*` 標籤時，會自動建置並推送映像到 Docker Hub。
+
+請在 GitHub 倉庫設定以下 Secrets：
+
+- `DOCKERHUB_USERNAME`：你的 Docker Hub 使用者名稱
+- `DOCKERHUB_TOKEN`：Docker Hub Access Token（不要使用密碼）
 
 ### 主要環境變數
 
@@ -280,6 +300,16 @@ docker compose up -d --build
 tar czf backup-data-$(date +%F).tar.gz data
 ```
 
+#### GitHub Actions Auto Push to Docker Hub
+
+This repository now includes `.github/workflows/docker-publish.yml`.  
+On pushes to `main` or tags matching `v*`, GitHub Actions will build and publish Docker images automatically.
+
+Set these GitHub repository secrets first:
+
+- `DOCKERHUB_USERNAME`: your Docker Hub username
+- `DOCKERHUB_TOKEN`: a Docker Hub access token (use token, not password)
+
 ### Main Environment Variables
 
 - `APP_DATA_DIR`: data directory (default `./data`)
@@ -375,6 +405,16 @@ docker compose up -d --build
 # データディレクトリをバックアップ
 tar czf backup-data-$(date +%F).tar.gz data
 ```
+
+#### GitHub Actions で Docker Hub へ自動プッシュ
+
+このリポジトリには `.github/workflows/docker-publish.yml` が含まれています。  
+`main` への push、または `v*` タグ push 時に、Docker イメージを自動ビルドして Docker Hub へ公開します。
+
+GitHub リポジトリの Secrets に以下を設定してください：
+
+- `DOCKERHUB_USERNAME`：Docker Hub ユーザー名
+- `DOCKERHUB_TOKEN`：Docker Hub の Access Token（パスワードではなくトークンを使用）
 
 ### 主な環境変数
 
