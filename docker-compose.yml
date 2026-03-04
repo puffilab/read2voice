@@ -1,0 +1,21 @@
+services:
+  app:
+    build: .
+    container_name: epub_tts_app
+    restart: unless-stopped
+    environment:
+      - APP_DATA_DIR=/app/data
+      - ENABLE_SIGNUP=1
+    volumes:
+      - ./data:/app/data
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: epub_tts_nginx
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "8000:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="docTitle">EPUB TTS Server</title>
+  <link rel="stylesheet" href="/static/styles.css?v=20260304-3" />
+</head>
+<body>
+  <main class="layout">
+    <section class="card account-card" hidden>
+      <h2 id="accountTitle">账号</h2>
+      <div class="row">
+        <input id="authUsername" type="text" placeholder="用户名 (3-32位)" />
+        <input id="authPassword" type="password" placeholder="密码 (至少6位)" />
+        <button id="registerBtn">注册</button>
+        <button id="loginBtn">登录</button>
+        <button id="logoutBtn">退出</button>
+      </div>
+      <p id="authStatus" class="status">未登录</p>
+      <p id="quotaStatus" class="status">额度：-</p>
+    </section>
+
+    <section class="card upload-card">
+      <h1 id="appTitle">文档语音服务器</h1>
+      <p id="appSubTitle" class="sub">部署在本地或 VPS，通过网页上传 EPUB/PDF/TXT/Word 并调用可选 TTS 引擎。</p>
+      <div class="row compact">
+        <label class="lang-picker">
+          <span id="languageLabel">语言</span>
+          <select id="languageSelect">
+            <option value="zh-CN">简体中文</option>
+            <option value="zh-TW">繁體中文</option>
+            <option value="en-US">English</option>
+            <option value="ja-JP">日本語</option>
+          </select>
+        </label>
+        <button id="refreshDocsBtn">刷新文件列表</button>
+      </div>
+
+      <div class="row">
+        <input id="epubFile" type="file" accept=".epub,.pdf,.txt,.doc,.docx" />
+        <button id="uploadBtn">上传文档</button>
+      </div>
+
+      <p id="uploadStatus" class="status">等待上传</p>
+      <div class="history-head">
+        <h3 id="documentsTitle">已上传文件</h3>
+      </div>
+      <div id="documentsList" class="history-list"></div>
+    </section>
+
+    <section class="card reading-card grid-2">
+      <div>
+        <h2 id="chapterPanelTitle">章节</h2>
+        <select id="chapterSelect" size="14"></select>
+      </div>
+      <div>
+        <h2 id="textPanelTitle">正文</h2>
+        <textarea id="chapterText" rows="14"></textarea>
+      </div>
+    </section>
+
+    <section class="card control-card">
+      <h2 id="ttsConfigTitle">TTS 引擎配置</h2>
+      <div class="engine-grid">
+        <label><span id="labelEngine">引擎</span>
+          <select id="engine">
+            <option value="openai">OpenAI TTS</option>
+            <option value="edge_tts">Edge TTS (免费)</option>
+            <option value="custom_http">自定义 HTTP API</option>
+          </select>
+        </label>
+        <label><span id="labelApiKey">API Key</span>
+          <input id="apiKey" type="password" placeholder="OpenAI/第三方 API Key" />
+        </label>
+        <label><span id="labelEndpoint">Endpoint</span>
+          <input id="endpoint" type="text" placeholder="可选。OpenAI默认 /v1/audio/speech" />
+        </label>
+        <label><span id="labelModel">Model</span>
+          <input id="model" type="text" placeholder="如 gpt-4o-mini-tts" />
+        </label>
+        <label><span id="labelVoiceSelect">Voice (自动下拉)</span>
+          <select id="voiceSelect"></select>
+        </label>
+        <label><span id="labelVoiceCustom">Voice 手动覆盖 (可选)</span>
+          <input id="voiceCustom" type="text" placeholder="为空则用下拉选项" />
+        </label>
+        <label><span id="labelSpeed">Speed (0.25 - 4.0)</span>
+          <input id="speed" type="number" min="0.25" max="4" step="0.05" value="1.0" />
+        </label>
+        <label><span id="labelOutputFormat">Output format</span>
+          <select id="outputFormat">
+            <option value="mp3">mp3</option>
+            <option value="opus">opus</option>
+            <option value="wav">wav</option>
+            <option value="flac">flac</option>
+            <option value="pcm">pcm</option>
+          </select>
+        </label>
+        <label><span id="labelInstructions">Instructions (OpenAI 可选)</span>
+          <input id="instructions" type="text" placeholder="如 温柔、平稳地朗读" />
+        </label>
+        <label><span id="labelCustomHeaders">Custom headers JSON (仅自定义HTTP)</span>
+          <input id="customHeaders" type="text" placeholder='{"X-API-Key":"xxx"}' />
+        </label>
+      </div>
+
+      <div class="row">
+        <button id="synthesizeChapterBtn">合成选中章节</button>
+        <button id="synthesizeTextBtn">合成文本框内容</button>
+        <button id="chainStartBtn">连续合成到末章</button>
+        <button id="chainStopBtn">停止连续</button>
+        <button id="saveProfileBtn">保存账号配置</button>
+        <button id="loadProfileBtn">读取账号配置</button>
+        <label class="toggle-inline"><input id="prefetchNextToggle" type="checkbox" checked /><span id="prefetchNextLabel">播放时预合成下一章</span></label>
+        <a id="downloadLink" href="#" download>下载音频</a>
+      </div>
+      <div class="progress-wrap">
+        <progress id="ttsProgress" value="0" max="100"></progress>
+        <span id="ttsProgressText">0%</span>
+      </div>
+      <p id="ttsStatus" class="status">等待合成</p>
+      <audio id="player" controls></audio>
+
+      <div class="history-head">
+        <h3 id="historyTitle">历史音频</h3>
+        <button id="refreshHistoryBtn">刷新历史</button>
+      </div>
+      <div id="historyList" class="history-list"></div>
+    </section>
+
+    <section id="adminPanel" class="card admin-card" hidden>
+      <h2 id="adminTitle">后台管理</h2>
+      <div class="admin-grid">
+        <div class="admin-box">
+          <h3 id="adminPlansTitle">会员等级额度</h3>
+          <div class="row">
+            <select id="adminPlanSelect"></select>
+            <input id="adminPlanUploads" type="number" placeholder="月上传额度，-1为不限" />
+            <input id="adminPlanSynths" type="number" placeholder="月合成额度，-1为不限" />
+            <button id="adminSavePlanBtn">保存等级额度</button>
+          </div>
+          <p id="adminPlanStatus" class="status">等待操作</p>
+        </div>
+        <div class="admin-box">
+          <h3 id="adminUsersTitle">用户等级管理</h3>
+          <div id="adminUsersList" class="admin-users-list"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/app.js?v=20260304-3"></script>
+</body>
+</html>
